@@ -2,7 +2,7 @@ import { connectDB } from "@/db/dbConfig";
 import { User } from "@/models/userModel";
 import { NextResponse, NextRequest } from "next/server";
 import bcryptjs from "bcryptjs";
-import { console } from "inspector";
+// import { console } from "inspector";
 
 
 connectDB()
