@@ -19,27 +19,27 @@ import { Input } from "../ui/input"
 // import { onLogin } from "@/app/(site)/login/server_action"
 
 
-export const loginSchema = z.object({
+export const signUpSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6, {
     message: 'Password must be at least 8 characters long',
   }),
 })
 
-export function LoginForm({
+export function SignUpForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
   const [loading, setLoading] = useState(false)
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<z.infer<typeof signUpSchema>>({
+    resolver: zodResolver(signUpSchema),
     defaultValues: {
       email: '',
       password: '',
     },
   })
 
-  function onSubmit(values: z.infer<typeof loginSchema>) {
+  function onSubmit(values: z.infer<typeof signUpSchema>) {
     console.log("🚀 ~ onSubmit ~ values:", values)
     // setLoading(true)
     // onLogin(values).then((data) => {
@@ -87,15 +87,16 @@ export function LoginForm({
             </div>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-6">
+                <Input name="name"  placeholder="Name" />
                 <Input name="email"  placeholder="Email" />
                 <Input name="password" placeholder="Password" />
                 <Button type="submit"  className="w-full">Submit</Button>
               </form>
             </Form>
             <div className="text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <a href="/signup" className="underline underline-offset-4">
-                Sign up
+              Already have an account{" "}
+              <a href="/login" className="underline underline-offset-4">
+                Login
               </a>
             </div>
           </div>

@@ -2,10 +2,10 @@ import { connectDB } from "@/db/dbConfig";
 import { User } from "@/models/userModel";
 import { NextResponse, NextRequest } from "next/server";
 import bcryptjs from "bcryptjs";
-// import { console } from "inspector";
+import Otp from "@/models/Otp";
+import { sendMail } from "@/lib/mailer";
 
-
-connectDB()
+connectDB();
 
 export async function POST(request: NextRequest) {
     try {
@@ -19,11 +19,15 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ message: "Please provide all fields" }, { status: 400 });
         }
 
-        const user = await User.findOne({ email });
+        const existingUser = await User.findOne({ email });
 
-        if (user) {
+        if (existingUser) {
             return NextResponse.json({ message: "User already exists" }, { status: 400 });
         }
+
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        await Otp.create({ email, otp });
+        await sendMail(email, otp);
 
         const salt = await bcryptjs.genSalt(10);
         const hashedPassword = await bcryptjs.hash(password, salt);
@@ -33,16 +37,17 @@ export async function POST(request: NextRequest) {
             email,
             password: hashedPassword,
         });
-       const savedUser = await newUser.save();
+
+        const savedUser = await newUser.save();
         console.log("User created successfully:", savedUser);
+
         return NextResponse.json({
-            message: "User created successfully",
+            message: "User created successfully. OTP sent to email.",
             success: true,
-            savedUser
+            savedUser,
         });
     } catch (error: any) {
         console.error("Error in signup route:", error);
         return NextResponse.json({ message: "Internal server error" }, { status: 500 });
-        
     }
 }
