@@ -13,7 +13,7 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { Input } from "../ui/input"
+import { FormInput } from "../ui/input"
 // import FormInput from '@/components/common/form/input'
 // import PasswordInput from '@/components/common/form/password_input'
 // import { onLogin } from "@/app/(site)/login/server_action"
@@ -87,9 +87,9 @@ export function SignUpForm({
             </div>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-6">
-                <Input name="name"  placeholder="Name" />
-                <Input name="email"  placeholder="Email" />
-                <Input name="password" placeholder="Password" />
+                <FormInput name="name" label="Name" />
+                <FormInput name="email" label="Email"  />
+                <FormInput name="password" label="Password"  />
                 <Button type="submit"  className="w-full">Submit</Button>
               </form>
             </Form>
